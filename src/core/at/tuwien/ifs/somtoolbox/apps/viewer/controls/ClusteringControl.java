@@ -72,6 +72,7 @@ import at.tuwien.ifs.somtoolbox.visualization.clustering.KMeansTreeBuilder;
  * 
  * @author Angela Roiger
  * @author Rudolf Mayer
+ * @author Taylor Peer
  * @version $Id: ClusteringControl.java 4143 2011-02-09 16:45:04Z mayer $
  */
 public class ClusteringControl extends AbstractViewerControl {
