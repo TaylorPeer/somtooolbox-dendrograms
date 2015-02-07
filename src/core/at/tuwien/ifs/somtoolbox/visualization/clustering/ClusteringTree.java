@@ -69,6 +69,7 @@ public class ClusteringTree extends PNode implements Serializable {
         this.width = width;
         topNode = top;
         startFontSize = 6 * width; // 10-> 6
+        DendrogramPaintTest.createAndShowGUI(topNode);
     }
 
     public ClusterNode findNode(int lvl) {
@@ -347,7 +348,7 @@ public class ClusteringTree extends PNode implements Serializable {
     /**
      * Function for recursion in recolorTree()
      * 
-     * @param col Color[] contaning the Palette
+     * @param col Color[] containing the Palette
      */
     private void recolorTree(Color[] col, ClusterNode n) {
         CommonSOMViewerStateData state = CommonSOMViewerStateData.getInstance();
@@ -360,6 +361,12 @@ public class ClusteringTree extends PNode implements Serializable {
         } else {
             n.setPaint(null);
         }
+
+        // dumpAllClusteringElements();
+        /*
+                Double centroid = n.getCentroid();
+                System.out.println("\t" + centroid.x + ", " + centroid.y + " (" + n.getX() + ", " + n.getY() + ")");
+                */
 
         if (col.length > 1 && state.colorClusters) {
             Color[] tmp1 = new Color[col.length / 2];
