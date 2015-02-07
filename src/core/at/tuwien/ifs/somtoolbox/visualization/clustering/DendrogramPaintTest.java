@@ -19,6 +19,10 @@ import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Point;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.util.Map;
+import java.util.TreeMap;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -30,21 +34,50 @@ import javax.swing.ScrollPaneConstants;
  */
 public class DendrogramPaintTest {
 
+    public static Map<Integer, Integer> levelXThresholds = new TreeMap<Integer, Integer>();
+
+    public static int getClickedLevel(int x) {
+        for (Map.Entry<Integer, Integer> entry : levelXThresholds.entrySet()) {
+            Integer key = entry.getKey();
+            Integer value = entry.getValue();
+
+            if (x > value) {
+                return levelXThresholds.size() - key;
+            }
+        }
+        return 0;
+    }
+
     public static void createAndShowGUI(ClusterNode topNode) {
+
+        // Reset level thresholds
+        levelXThresholds = new TreeMap<Integer, Integer>();
+
         JFrame f = new JFrame();
 
         DendrogramPaintPanel panel = new DendrogramPaintPanel(topNode);
-        
-        JScrollPane scrollPane = new JScrollPane( panel );
-        
+
+        JScrollPane scrollPane = new JScrollPane(panel);
+
         scrollPane.setPreferredSize(new Dimension(panel.getWidth(), 800));
         scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
-        
+
         f.getContentPane().add(scrollPane);
-        
+
         f.setSize(1000, 800);
         f.setLocationRelativeTo(null);
         f.setVisible(true);
+
+        JPanel mainPanel = new JPanel();
+        mainPanel.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mousePressed(MouseEvent e) {
+                int level = getClickedLevel(e.getX());
+                System.out.println("clicked " + level);
+
+            }
+        });
+        f.add(mainPanel);
     }
 }
 
@@ -63,15 +96,14 @@ class DendrogramPaintPanel extends JPanel {
     private int widthPerLevel;
 
     private int currentY;
-    
+
     private static final int MIN_HEIGHT_PER_LEAF = 4;
-    
+
     private int margin = 25;
 
     DendrogramPaintPanel(ClusterNode topNode) {
         this.root = topNode;
     }
-    
 
     private static int getNumChildren(ClusterNode node) {
 
@@ -113,17 +145,17 @@ class DendrogramPaintPanel extends JPanel {
     protected void paintComponent(Graphics gr) {
         super.paintComponent(gr);
         Graphics2D g = (Graphics2D) gr;
-
-        
+        int margin = 0;
         leaves = countLeaves(root);
         levels = countLevels(root);
         heightPerLeaf = (int) Math.round(((double) getHeight() - margin - margin) / leaves);
-        
-        if(heightPerLeaf < MIN_HEIGHT_PER_LEAF)
-        	heightPerLeaf = MIN_HEIGHT_PER_LEAF;
-        
+
+        if (heightPerLeaf < MIN_HEIGHT_PER_LEAF) {
+            heightPerLeaf = MIN_HEIGHT_PER_LEAF;
+        }
+
         setPreferredSize(new Dimension(getWidth(), calculateHeight()));
-        
+
         widthPerLevel = (int) Math.round(((double) getWidth() - margin - margin) / levels);
         currentY = 0;
 
@@ -131,10 +163,9 @@ class DendrogramPaintPanel extends JPanel {
         draw(g, root, 0);
     }
 
-
-	private int calculateHeight() {
-		return heightPerLeaf*leaves + 2*margin;
-	}
+    private int calculateHeight() {
+        return heightPerLeaf * leaves + 2 * margin;
+    }
 
     private <T> Point draw(Graphics g, ClusterNode node, int y) {
         if (getNumChildren(node) == 0) {
@@ -154,6 +185,10 @@ class DendrogramPaintPanel extends JPanel {
             ClusterNode child2 = node.getChild2();
             Point p0 = draw(g, child1, y);
             Point p1 = draw(g, child2, y + heightPerLeaf);
+
+            // TODO
+            DendrogramPaintTest.levelXThresholds.put(countLevels(child1), p0.x);
+            DendrogramPaintTest.levelXThresholds.put(countLevels(child2), p1.x);
 
             g.fillRect(p0.x - 2, p0.y - 2, 4, 4);
             g.fillRect(p1.x - 2, p1.y - 2, 4, 4);
