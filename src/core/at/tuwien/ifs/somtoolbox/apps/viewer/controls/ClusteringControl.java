@@ -514,7 +514,6 @@ public class ClusteringControl extends AbstractViewerControl {
         }
         sticky.setSelected(st);
         redrawClustering();
-
     }
 
 }

@@ -29,7 +29,7 @@ public class DendrogramPaintTest {
 
     public static void createAndShowGUI(ClusterNode topNode) {
         JFrame f = new JFrame();
-        f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        // TODO remove f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         DendrogramPaintPanel panel = new DendrogramPaintPanel(topNode);
         f.getContentPane().add(panel);
@@ -78,7 +78,7 @@ class DendrogramPaintPanel extends JPanel {
         return count + getNumChildren(child1) + getNumChildren(child1);
     }
 
-    private static <T> int countLeaves(ClusterNode node) {
+    private static int countLeaves(ClusterNode node) {
         if (getNumChildren(node) == 0) {
             return 1;
         }
@@ -87,7 +87,7 @@ class DendrogramPaintPanel extends JPanel {
         return countLeaves(child1) + countLeaves(child2);
     }
 
-    private static <T> int countLevels(ClusterNode node) {
+    private static int countLevels(ClusterNode node) {
         if (getNumChildren(node) == 0) {
             return 1;
         }
@@ -125,8 +125,7 @@ class DendrogramPaintPanel extends JPanel {
             int resultY = currentY;
             currentY += heightPerLeaf;
             return new Point(resultX, resultY);
-        }
-        if (getNumChildren(node) >= 2) {
+        } else if (getNumChildren(node) >= 2) {
             ClusterNode child1 = node.getChild1();
             ClusterNode child2 = node.getChild2();
             Point p0 = draw(g, child1, y);
