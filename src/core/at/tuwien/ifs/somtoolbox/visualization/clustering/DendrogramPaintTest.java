@@ -59,10 +59,10 @@ public class DendrogramPaintTest {
 
         JScrollPane scrollPane = new JScrollPane(panel);
 
-        scrollPane.setPreferredSize(new Dimension(panel.getWidth(), 800));
-        scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+//        scrollPane.setPreferredSize(new Dimension(panel.getWidth(), 800));
+//        scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 
-        f.getContentPane().add(scrollPane);
+        f.getContentPane().add(panel);
 
         f.setSize(1000, 800);
         f.setLocationRelativeTo(null);
@@ -154,7 +154,7 @@ class DendrogramPaintPanel extends JPanel {
             heightPerLeaf = MIN_HEIGHT_PER_LEAF;
         }
 
-        setPreferredSize(new Dimension(getWidth(), calculateHeight()));
+        //setPreferredSize(new Dimension(getWidth(), calculateHeight()));
 
         widthPerLevel = (int) Math.round(((double) getWidth() - margin - margin) / levels);
         currentY = 0;
