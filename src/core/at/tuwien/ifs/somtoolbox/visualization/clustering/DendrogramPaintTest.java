@@ -29,11 +29,11 @@ public class DendrogramPaintTest {
 
     public static void createAndShowGUI(ClusterNode topNode) {
         JFrame f = new JFrame();
-        // TODO remove f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         DendrogramPaintPanel panel = new DendrogramPaintPanel(topNode);
         f.getContentPane().add(panel);
-
+        //JScrollPane scrollPane = new JScrollPane( panel );
+        
         f.setSize(1000, 800);
         f.setLocationRelativeTo(null);
         f.setVisible(true);
@@ -104,8 +104,8 @@ class DendrogramPaintPanel extends JPanel {
         int margin = 25;
         leaves = countLeaves(root);
         levels = countLevels(root);
-        heightPerLeaf = (getHeight() - margin - margin) / leaves;
-        widthPerLevel = (getWidth() - margin - margin) / levels;
+        heightPerLeaf = (int) Math.round(((double) getHeight() - margin - margin) / leaves);
+        widthPerLevel = (int) Math.round(((double) getWidth() - margin - margin) / levels);
         currentY = 0;
 
         g.translate(margin, margin);

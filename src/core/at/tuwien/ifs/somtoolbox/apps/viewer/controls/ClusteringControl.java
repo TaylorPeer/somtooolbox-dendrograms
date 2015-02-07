@@ -51,7 +51,6 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 
 import edu.umd.cs.piccolo.PNode;
 import edu.umd.cs.piccolo.util.PObjectOutputStream;
-
 import at.tuwien.ifs.commons.gui.controls.TitledCollapsiblePanel;
 import at.tuwien.ifs.somtoolbox.apps.viewer.CommonSOMViewerStateData;
 import at.tuwien.ifs.somtoolbox.apps.viewer.SOMPane;
@@ -64,6 +63,7 @@ import at.tuwien.ifs.somtoolbox.util.UiUtils;
 import at.tuwien.ifs.somtoolbox.visualization.clustering.ClusterElementsStorage;
 import at.tuwien.ifs.somtoolbox.visualization.clustering.ClusterNode;
 import at.tuwien.ifs.somtoolbox.visualization.clustering.ClusteringTree;
+import at.tuwien.ifs.somtoolbox.visualization.clustering.DendrogramPaintTest;
 import at.tuwien.ifs.somtoolbox.visualization.clustering.KMeans;
 import at.tuwien.ifs.somtoolbox.visualization.clustering.KMeansTreeBuilder;
 
@@ -302,6 +302,26 @@ public class ClusteringControl extends AbstractViewerControl {
         evaluationPanel.add(purityLabel, gcEval.nextCol());
 
         getContentPane().add(evaluationPanel, c.nextRow());
+        
+        
+        //DENDOS
+        JPanel dendrogramPanel = new TitledCollapsiblePanel("Dendrogram", new GridLayout(1, 4), true);
+
+        JButton dendoButton = new JButton("Open Dendrogram");
+        dendoButton.setFont(smallFont);
+        dendoButton.setMargin(SMALL_INSETS);
+        dendoButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+            	      
+            	DendrogramPaintTest.createAndShowGUI(mapPane.getMap().getCurrentClusteringTree().findNode(1));
+            }
+        });
+        dendrogramPanel.add(dendoButton);
+        
+        getContentPane().add(dendrogramPanel, c.nextRow());
+        
+        
 
         JPanel panelButtons = new JPanel(new GridLayout(1, 4));
 
