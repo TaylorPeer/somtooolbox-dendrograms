@@ -15,12 +15,15 @@
  */
 package at.tuwien.ifs.somtoolbox.visualization.clustering;
 
+import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Point;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.ScrollPaneConstants;
 
 /**
  * @author taylorpeer
@@ -31,8 +34,13 @@ public class DendrogramPaintTest {
         JFrame f = new JFrame();
 
         DendrogramPaintPanel panel = new DendrogramPaintPanel(topNode);
-        f.getContentPane().add(panel);
-        //JScrollPane scrollPane = new JScrollPane( panel );
+        
+        JScrollPane scrollPane = new JScrollPane( panel );
+        
+        scrollPane.setPreferredSize(new Dimension(panel.getWidth(), 800));
+        scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+        
+        f.getContentPane().add(scrollPane);
         
         f.setSize(1000, 800);
         f.setLocationRelativeTo(null);
@@ -55,10 +63,15 @@ class DendrogramPaintPanel extends JPanel {
     private int widthPerLevel;
 
     private int currentY;
+    
+    private static final int MIN_HEIGHT_PER_LEAF = 4;
+    
+    private int margin = 25;
 
     DendrogramPaintPanel(ClusterNode topNode) {
         this.root = topNode;
     }
+    
 
     private static int getNumChildren(ClusterNode node) {
 
@@ -101,16 +114,27 @@ class DendrogramPaintPanel extends JPanel {
         super.paintComponent(gr);
         Graphics2D g = (Graphics2D) gr;
 
-        int margin = 25;
+        
         leaves = countLeaves(root);
         levels = countLevels(root);
         heightPerLeaf = (int) Math.round(((double) getHeight() - margin - margin) / leaves);
+        
+        if(heightPerLeaf < MIN_HEIGHT_PER_LEAF)
+        	heightPerLeaf = MIN_HEIGHT_PER_LEAF;
+        
+        setPreferredSize(new Dimension(getWidth(), calculateHeight()));
+        
         widthPerLevel = (int) Math.round(((double) getWidth() - margin - margin) / levels);
         currentY = 0;
 
         g.translate(margin, margin);
         draw(g, root, 0);
     }
+
+
+	private int calculateHeight() {
+		return heightPerLeaf*leaves + 2*margin;
+	}
 
     private <T> Point draw(Graphics g, ClusterNode node, int y) {
         if (getNumChildren(node) == 0) {
