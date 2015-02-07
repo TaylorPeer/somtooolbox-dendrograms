@@ -51,6 +51,7 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 
 import edu.umd.cs.piccolo.PNode;
 import edu.umd.cs.piccolo.util.PObjectOutputStream;
+
 import at.tuwien.ifs.commons.gui.controls.TitledCollapsiblePanel;
 import at.tuwien.ifs.somtoolbox.apps.viewer.CommonSOMViewerStateData;
 import at.tuwien.ifs.somtoolbox.apps.viewer.SOMPane;
@@ -118,11 +119,18 @@ public class ClusteringControl extends AbstractViewerControl {
 
     private JLabel purityLabel;
 
+    private static ClusteringControl instance = null;
+
     public ClusteringControl(String title, CommonSOMViewerStateData state, SOMPane mappane) {
         super(title, state, new GridBagLayout());
         this.mapPane = mappane;
+        instance = this;
         init();
         updateControlDisplay();
+    }
+
+    public static ClusteringControl getInstance() {
+        return instance;
     }
 
     public void init() {
@@ -302,9 +310,8 @@ public class ClusteringControl extends AbstractViewerControl {
         evaluationPanel.add(purityLabel, gcEval.nextCol());
 
         getContentPane().add(evaluationPanel, c.nextRow());
-        
-        
-        //DENDOS
+
+        // DENDOS
         JPanel dendrogramPanel = new TitledCollapsiblePanel("Dendrogram", new GridLayout(1, 4), true);
 
         JButton dendoButton = new JButton("Open Dendrogram");
@@ -313,15 +320,13 @@ public class ClusteringControl extends AbstractViewerControl {
         dendoButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-            	      
-            	DendrogramPaintTest.createAndShowGUI(mapPane.getMap().getCurrentClusteringTree().findNode(1));
+
+                DendrogramPaintTest.createAndShowGUI(mapPane.getMap().getCurrentClusteringTree().findNode(1));
             }
         });
         dendrogramPanel.add(dendoButton);
-        
+
         getContentPane().add(dendrogramPanel, c.nextRow());
-        
-        
 
         JPanel panelButtons = new JPanel(new GridLayout(1, 4));
 
@@ -534,6 +539,13 @@ public class ClusteringControl extends AbstractViewerControl {
         }
         sticky.setSelected(st);
         redrawClustering();
+    }
+
+    /**
+     * @return Returns the spinnerNoCluster.
+     */
+    public JSpinner getSpinnerNoCluster() {
+        return spinnerNoCluster;
     }
 
 }
