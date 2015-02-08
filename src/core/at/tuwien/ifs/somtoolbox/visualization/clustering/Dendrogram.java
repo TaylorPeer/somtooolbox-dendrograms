@@ -32,19 +32,19 @@ import javax.swing.ScrollPaneConstants;
 import at.tuwien.ifs.somtoolbox.apps.viewer.controls.ClusteringControl;
 
 /**
- * @author taylorpeer
+ * @author Taylor Peer
+ * @author Michael Wagner
  */
-public class DendrogramPaintTest {
+public class Dendrogram {
 
     public static Map<Integer, Integer> levelXThresholds = new TreeMap<Integer, Integer>();
 
     public static Map<Integer, Integer> levelClusterCounts = new TreeMap<Integer, Integer>();
 
-    public static int getClickedLevel(int x) {
+    public static int getClustersAtClickedLevel(int x) {
         for (Map.Entry<Integer, Integer> entry : levelXThresholds.entrySet()) {
             Integer key = entry.getKey();
             Integer value = entry.getValue();
-
             if (x > value) {
                 return getClusterCountAboveLevel(key);
             }
@@ -81,7 +81,7 @@ public class DendrogramPaintTest {
         panel.addMouseListener(new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent e) {
-                int level = getClickedLevel(e.getX());
+                int level = getClustersAtClickedLevel(e.getX());
                 ClusteringControl.getInstance().getSpinnerNoCluster().setValue(level);
             }
         });
@@ -91,7 +91,6 @@ public class DendrogramPaintTest {
         f.setSize(1000, 800);
         f.setLocationRelativeTo(null);
         f.setVisible(true);
-
     }
 }
 
@@ -159,7 +158,7 @@ class DendrogramPaintPanel extends JPanel {
     protected void paintComponent(Graphics gr) {
         super.paintComponent(gr);
 
-        DendrogramPaintTest.levelClusterCounts = new TreeMap<Integer, Integer>();
+        Dendrogram.levelClusterCounts = new TreeMap<Integer, Integer>();
 
         Graphics2D g = (Graphics2D) gr;
         int margin = 5;
@@ -187,12 +186,6 @@ class DendrogramPaintPanel extends JPanel {
     private <T> Point draw(Graphics g, ClusterNode node, int y) {
         if (getNumChildren(node) == 0) {
             int x = getWidth() - widthPerLevel;
-
-            // double centroidX = node.getCentroid().getX();
-            // double centroidY = node.getCentroid().getY();
-            // String label = centroidX + "x" + centroidY;
-            // g.drawString(label, x + 8, currentY + 8);
-
             int resultX = x;
             int resultY = currentY;
             currentY += heightPerLeaf;
@@ -203,26 +196,26 @@ class DendrogramPaintPanel extends JPanel {
             Point p0 = draw(g, child1, y);
             Point p1 = draw(g, child2, y + heightPerLeaf);
 
-            // TODO
-            DendrogramPaintTest.levelXThresholds.put(countLevels(child1), p0.x);
-            DendrogramPaintTest.levelXThresholds.put(countLevels(child2), p1.x);
+            // Update X-thresholds of diagram levels
+            Dendrogram.levelXThresholds.put(countLevels(child1), p0.x);
+            Dendrogram.levelXThresholds.put(countLevels(child2), p1.x);
 
+            // Update number of clusters in each level
             int child1Level = countLevels(child1);
-            if (DendrogramPaintTest.levelClusterCounts.containsKey(child1Level)) {
-                Integer countAtLevel = DendrogramPaintTest.levelClusterCounts.get(child1Level);
+            if (Dendrogram.levelClusterCounts.containsKey(child1Level)) {
+                Integer countAtLevel = Dendrogram.levelClusterCounts.get(child1Level);
                 countAtLevel++;
-                DendrogramPaintTest.levelClusterCounts.put(child1Level, countAtLevel);
+                Dendrogram.levelClusterCounts.put(child1Level, countAtLevel);
             } else {
-                DendrogramPaintTest.levelClusterCounts.put(child1Level, 1);
+                Dendrogram.levelClusterCounts.put(child1Level, 1);
             }
-
             int child2Level = countLevels(child2);
-            if (DendrogramPaintTest.levelClusterCounts.containsKey(child2Level)) {
-                Integer countAtLevel = DendrogramPaintTest.levelClusterCounts.get(child2Level);
+            if (Dendrogram.levelClusterCounts.containsKey(child2Level)) {
+                Integer countAtLevel = Dendrogram.levelClusterCounts.get(child2Level);
                 countAtLevel++;
-                DendrogramPaintTest.levelClusterCounts.put(child2Level, countAtLevel);
+                Dendrogram.levelClusterCounts.put(child2Level, countAtLevel);
             } else {
-                DendrogramPaintTest.levelClusterCounts.put(child2Level, 1);
+                Dendrogram.levelClusterCounts.put(child2Level, 1);
             }
 
             g.fillRect(p0.x - 2, p0.y - 2, 4, 4);
@@ -235,7 +228,6 @@ class DendrogramPaintPanel extends JPanel {
             Point p = new Point(vx, p0.y + (p1.y - p0.y) / 2);
             return p;
         }
-        // Should never happen
         return new Point();
     }
 }

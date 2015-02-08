@@ -64,7 +64,7 @@ import at.tuwien.ifs.somtoolbox.util.UiUtils;
 import at.tuwien.ifs.somtoolbox.visualization.clustering.ClusterElementsStorage;
 import at.tuwien.ifs.somtoolbox.visualization.clustering.ClusterNode;
 import at.tuwien.ifs.somtoolbox.visualization.clustering.ClusteringTree;
-import at.tuwien.ifs.somtoolbox.visualization.clustering.DendrogramPaintTest;
+import at.tuwien.ifs.somtoolbox.visualization.clustering.Dendrogram;
 import at.tuwien.ifs.somtoolbox.visualization.clustering.KMeans;
 import at.tuwien.ifs.somtoolbox.visualization.clustering.KMeansTreeBuilder;
 
@@ -101,7 +101,7 @@ public class ClusteringControl extends AbstractViewerControl {
 
     private JSlider valueQe;
 
-    private JCheckBox sticky = new JCheckBox("fix", false);;
+    private JCheckBox sticky = new JCheckBox("fix", false);
 
     private JPanel kmeansInitialisationPanel = new JPanel();
 
@@ -321,7 +321,7 @@ public class ClusteringControl extends AbstractViewerControl {
             @Override
             public void actionPerformed(ActionEvent e) {
 
-                DendrogramPaintTest.createAndShowGUI(mapPane.getMap().getCurrentClusteringTree().findNode(1));
+                Dendrogram.createAndShowGUI(mapPane.getMap().getCurrentClusteringTree().findNode(1));
             }
         });
         dendrogramPanel.add(dendoButton);

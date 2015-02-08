@@ -69,7 +69,7 @@ public class ClusteringTree extends PNode implements Serializable {
         this.width = width;
         topNode = top;
         startFontSize = 6 * width; // 10-> 6
-        DendrogramPaintTest.createAndShowGUI(topNode);
+        Dendrogram.createAndShowGUI(topNode);
     }
 
     public ClusterNode findNode(int lvl) {
