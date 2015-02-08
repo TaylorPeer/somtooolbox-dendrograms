@@ -1,0 +1,44 @@
+66a67
+> import at.tuwien.ifs.somtoolbox.visualization.clustering.Dendrogram;
+77a79
+> 
+102c104
+<     private JCheckBox sticky = new JCheckBox("fix", false);;
+---
+>     private JCheckBox sticky = new JCheckBox("fix", false);
+119a122,123
+>     private static ClusteringControl instance = null;
+> 
+122a127
+>         instance = this;
+126a132,135
+>     public static ClusteringControl getInstance() {
+>         return instance;
+>     }
+> 
+304a314,330
+>         // DENDOS
+>         JPanel dendrogramPanel = new TitledCollapsiblePanel("Dendrogram", new GridLayout(1, 4), true);
+> 
+>         JButton dendoButton = new JButton("Open Dendrogram");
+>         dendoButton.setFont(smallFont);
+>         dendoButton.setMargin(SMALL_INSETS);
+>         dendoButton.addActionListener(new ActionListener() {
+>             @Override
+>             public void actionPerformed(ActionEvent e) {
+> 
+>                 Dendrogram.createAndShowGUI(mapPane.getMap().getCurrentClusteringTree().findNode(1));
+>             }
+>         });
+>         dendrogramPanel.add(dendoButton);
+> 
+>         getContentPane().add(dendrogramPanel, c.nextRow());
+> 
+515a542
+>     }
+516a544,548
+>     /**
+>      * @return Returns the spinnerNoCluster.
+>      */
+>     public JSpinner getSpinnerNoCluster() {
+>         return spinnerNoCluster;

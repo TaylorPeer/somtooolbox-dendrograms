@@ -1,0 +1,13 @@
+71a72
+>         Dendrogram.createAndShowGUI(topNode);
+350c351
+<      * @param col Color[] contaning the Palette
+---
+>      * @param col Color[] containing the Palette
+363a365,370
+>         // dumpAllClusteringElements();
+>         /*
+>                 Double centroid = n.getCentroid();
+>                 System.out.println("\t" + centroid.x + ", " + centroid.y + " (" + n.getX() + ", " + n.getY() + ")");
+>                 */
+> 
